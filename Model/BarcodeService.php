@@ -1,6 +1,8 @@
 <?php
 namespace Mopa\Bundle\BarcodeBundle\Model;
 
+use Imagine\Image\Metadata\MetadataBag;
+use Imagine\Image\Palette\RGB;
 use Monolog\Logger;
 use Imagine\Gd\Image;
 use Imagine\Image\ImagineInterface;
@@ -100,10 +102,15 @@ class BarcodeService{
                 $rendererOptions = isset($options['rendererOptions']) ? $options['rendererOptions'] : array();
                 $rendererOptions['width'] = isset($rendererOptions['width']) ? $rendererOptions['width'] : 2233;
                 $rendererOptions['height'] = isset($rendererOptions['height']) ? $rendererOptions['height'] : 649;
-                $image = new Image(
+
+                $rgb      = new RGB();
+                $metadata = new MetadataBag();
+                $image    = new Image(
                     $imageResource = Barcode::factory(
                         $type, 'image', $barcodeOptions, $rendererOptions
-                    )->draw()
+                    )->draw(),
+                    $rgb,
+                    $metadata
                 );
                 $image->save($file);
         }
